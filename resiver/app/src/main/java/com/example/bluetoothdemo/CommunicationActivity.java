@@ -35,14 +35,15 @@ public class CommunicationActivity extends AppCompatActivity {
     private BluetoothSocket mBluetoothSocket;
     private final UUID mUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//蓝牙串口服务的UUID
     private ToastUtil mToast;
-    private TextView mReceiveContent;
-    private TextView mSendContent;
-    private TextView mCancelConn;
+//    private TextView mReceiveContent;
+//    private TextView mSendContent;
+//    private TextView mCancelConn;
     private String mSendContentStr;
     private static OutputStream mOS;
     private String TAG = "CommunicationActivity";
     private String mName;
     private TextView mBtName;
+    byte[] buffer = new byte[1];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,26 +63,18 @@ public class CommunicationActivity extends AppCompatActivity {
         mEditText = findViewById(R.id.send_edit_text);
         mSendBtn = findViewById(R.id.send_text_btn);
         mToast = new ToastUtil(this);
-        mReceiveContent = findViewById(R.id.received_text_content);
-        mSendContent = findViewById(R.id.send_text_content);
-        mCancelConn = findViewById(R.id.cancel_conn_btn);
         mBtName = findViewById(R.id.bluetooth_name);
         mBtName.setText(mName);
     }
 
     private void initListener() {
-        mSendBtn.setOnClickListener(new View.OnClickListener() {
+        mSendBtn.setOnClickListener(new View.OnClickListener() {        // 按键点击事件
             @Override
             public void onClick(View view) {
+                buffer[0] = 0x41;
                 mSendContentStr = mEditText.getText().toString();
                 //发送信息
-                sendMessage(mSendContentStr);
-            }
-        });
-        mCancelConn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
+                sendMessage(buffer);
             }
         });
     }
@@ -90,16 +83,13 @@ public class CommunicationActivity extends AppCompatActivity {
      * 发送数据的方法
      * @param contentStr
      */
-    private void sendMessage(String contentStr) {
+    private void sendMessage(byte[] buffer) {   // 写数据缓存，协议字节多长，就定多长，一个十六进制数是1个字节
         if (mBluetoothSocket.isConnected()) {
             try {
                 //获取输出流
                 mOS = mBluetoothSocket.getOutputStream();
 /*******************在此填写通信协议***************************************/
-                byte[] buffer = new byte[1];        // 写数据缓存，协议字节多长，就定多长，一个十六进制数是1个字节
                 if (mOS != null) {
-                    //写数据（参数为byte数组）
-                    buffer[0] = 0x41;
                     mOS.write(buffer);    // 发送A
                     mToast.showToast("发送成功");
 /*******************在此填写通信协议***************************************/
@@ -196,7 +186,7 @@ public class CommunicationActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             //将收到的数据显示在TextView上
-                            mReceiveContent.append(a);
+//                            mReceiveContent.append(a);
                         }
                     });
                 } catch (IOException e) {

@@ -146,8 +146,8 @@ public class ReceiveDataThread extends Thread{
 /**********************在此填写通信协议****************************************/
                 int a = (buffer[0]);
                 System.out.println(a);
-//                if(a == 0x41)
-//                    System.out.println("pppppppppppppp");
+                if(a == 0x41)
+                    System.out.println("pppppppppppppp");
 /**********************在此填写通信协议****************************************/
             } catch (IOException e) {
                 e.printStackTrace();
