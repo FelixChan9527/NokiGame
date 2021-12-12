@@ -37,8 +37,7 @@ public class BluetoothActivity extends Activity {
     private static TextView server_state;
     private static EditText server_send;
 
-    Intent itent1 = null;
-    Intent itent2 = null;
+    Intent itent = null;
 
     BluetoothAdapter bluetooth = null;//本地蓝牙设备
     BluetoothServerSocket serverSocket = null;//蓝牙设备Socket服务端
@@ -77,8 +76,8 @@ public class BluetoothActivity extends Activity {
                     if (socket != null) {               // 表示连接成功
                         out = new PrintStream(socket.getOutputStream());
                         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        itent2 = new Intent(BluetoothActivity.this, MainActivity.class);
-                        startActivity(itent2);      // 页面跳转
+                        itent = new Intent(BluetoothActivity.this, MainActivity.class);
+                        startActivity(itent);      // 页面跳转
                     }
                     handler.sendEmptyMessage(CONN_SUCCESS);
                 } catch (IOException e) {

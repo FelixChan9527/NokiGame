@@ -143,18 +143,7 @@ public class MicroActivity extends AppCompatActivity {
 			return;
 		}
 		microLoader.applyConfiguration();		// 不能删
-//		VirtualKeyboard vk = ContextHolder.getVk();
-//		VirtualKeyboard vk = null;		// 在这里初始化键盘，直接屏蔽
-//		int orientation = microLoader.getOrientation();
-//		if (vk != null) {
-//			vk.setView(overlayView);
-//			overlayView.addLayer(vk);		// 这个只是显示按键，屏蔽掉只是看不见按键了
-//			if (vk.isPhone()) {				// 无影响
-//				orientation = ORIENTATION_PORTRAIT;
-//			}
-//		}
-//		setOrientation(orientation);
-//		menuKey = microLoader.getMenuKeyCode();
+
 		// 以下不能删
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		try {
@@ -169,20 +158,16 @@ public class MicroActivity extends AppCompatActivity {
 		button1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (current instanceof Canvas) {
-					Canvas canvas = (Canvas) current;
-					Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-7)));
-				}
+				Canvas canvas = (Canvas) current;
+				Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-7)));
 			}
 		});
 		Button button2 = findViewById(R.id.jjj);
 		button2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (current instanceof Canvas) {
-					Canvas canvas = (Canvas) current;
-					Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-5)));
-				}
+				Canvas canvas = (Canvas) current;
+				Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-5)));
 			}
 		});
 /*********************在此出填写通信协议***************************************************/
@@ -194,9 +179,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	public class ReceiveDataThread extends Thread{
-
 		private InputStream inputStream;
-
 		public ReceiveDataThread() {
 			super();
 			try {
@@ -214,13 +197,12 @@ public class MicroActivity extends AppCompatActivity {
 				try {
 					inputStream.read(buffer);
 /**********************在此填写通信协议****************************************/
-                int a = (buffer[0]);
-                System.out.println(a);
-                if(a == 0x41)
-					if (current instanceof Canvas) {
-						Canvas canvas = (Canvas) current;
-						Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-5)));
-					}
+                int data = (buffer[0]);
+                System.out.println(data);
+                if(data == 0x41) {
+					Canvas canvas = (Canvas) current;		// 必须不断更新状态
+					Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(Canvas.KEY_FIRE)));
+				}
 /**********************在此填写通信协议****************************************/
 				} catch (IOException e) {
 					e.printStackTrace();
