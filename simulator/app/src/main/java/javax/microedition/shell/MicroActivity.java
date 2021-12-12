@@ -195,18 +195,66 @@ public class MicroActivity extends AppCompatActivity {
 			byte[] buffer = new byte[1];    // 协议字节多长，就定多长，一个十六进制数是1个字节
 			while (true){
 				try {
-					inputStream.read(buffer);
+					inputStream.read(buffer);		// 获取接收的数据
 /**********************在此填写通信协议****************************************/
-                int data = (buffer[0]);
-                System.out.println(data);
-                if(data == 0x41) {
-					Canvas canvas = (Canvas) current;		// 必须不断更新状态
-					Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(Canvas.KEY_FIRE)));
-				}
+					int data = (buffer[0]);
+					control(data);
 /**********************在此填写通信协议****************************************/
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+
+		public void press_key(int KEY_CODE){		// 模拟按键按下
+			Canvas canvas = (Canvas) current;		// 必须不断更新状态
+			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(KEY_CODE)));	// 发送键值
+		}
+		public void release_key(int KEY_CODE){		// 模拟按键松开
+			Canvas canvas = (Canvas) current;		// 必须不断更新状态
+			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(KEY_CODE)));	// 发送键值
+		}
+		public void control(int data){
+			switch (data){
+				case 0x01:	press_key(-1);	break;				// 上 按下
+				case 0x02:	press_key(-2);	break;				// 下 按下
+				case 0x03:	press_key(-3);	break;				// 左 按下
+				case 0x04:	press_key(-4);	break;				// 右 按下
+				case 0x05:	press_key(-5);	break;				// 中 按下
+				case 0x06:	press_key(-6);	break;				// 选项 按下
+				case 0x07:	press_key(-7);	break;				// 返回 按下
+				case 0x08:	press_key(49);	break;				// 1 按下
+				case 0x09:	press_key(50);	break;				// 2 按下
+				case 0x10:	press_key(51);	break;				// 3 按下
+				case 0x11:	press_key(52);	break;				// 4 按下
+				case 0x12:	press_key(53);	break;				// 5 按下
+				case 0x13:	press_key(54);	break;				// 6 按下
+				case 0x14:	press_key(55);	break;				// 7 按下
+				case 0x15:	press_key(56);	break;				// 8 按下
+				case 0x16:	press_key(57);	break;				// 9 按下
+				case 0x17:	press_key(42);	break;				// * 按下
+				case 0x18:	press_key(48);	break;				// 0 按下
+				case 0x19:	press_key(35);	break;				// # 按下
+				case 0x20:	release_key(-1);	break;				// 上 松开
+				case 0x21:	release_key(-2);	break;				// 下 松开
+				case 0x22:	release_key(-3);	break;				// 左 松开
+				case 0x23:	release_key(-4);	break;				// 右 松开
+				case 0x24:	release_key(-5);	break;				// 中 松开
+				case 0x25:	release_key(-6);	break;				// 选项 松开
+				case 0x26:	release_key(-7);	break;				// 返回 松开
+				case 0x27:	release_key(49);	break;				// 1 松开
+				case 0x28:	release_key(50);	break;				// 2 松开
+				case 0x29:	release_key(51);	break;				// 3 松开
+				case 0x30:	release_key(52);	break;				// 4 松开
+				case 0x31:	release_key(53);	break;				// 5 松开
+				case 0x32:	release_key(54);	break;				// 6 松开
+				case 0x33:	release_key(55);	break;				// 7 松开
+				case 0x34:	release_key(56);	break;				// 8 松开
+				case 0x35:	release_key(57);	break;				// 9 松开
+				case 0x36:	release_key(42);	break;				// * 松开
+				case 0x37:	release_key(48);	break;				// 0 松开
+				case 0x38:	release_key(35);	break;				// # 松开
+
 			}
 		}
 	}

@@ -1,14 +1,19 @@
 package com.example.bluetoothdemo;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,56 +32,99 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 public class CommunicationActivity extends AppCompatActivity {
-    private EditText mEditText;
-    private Button mSendBtn;
-    private String mAddress;
+    private String mAddress, mName;
     private BluetoothAdapter mBlueToothAdapter;
     private BluetoothDevice mDevice;
     private BluetoothSocket mBluetoothSocket;
     private final UUID mUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//蓝牙串口服务的UUID
     private ToastUtil mToast;
-//    private TextView mReceiveContent;
-//    private TextView mSendContent;
-//    private TextView mCancelConn;
-    private String mSendContentStr;
     private static OutputStream mOS;
     private String TAG = "CommunicationActivity";
-    private String mName;
-    private TextView mBtName;
     byte[] buffer = new byte[1];
+    private Button btn0;
+    private Button btn1;
+    private Button btn2;
+    private Button btn3;
+    private Button btn4;
+    private Button btn5;
+    private Button btn6;
+    private Button btn7;
+    private Button btn8;
+    private Button btn9;
+    private Button btn_star;
+    private Button btn_pound;
+    private Button btn_opt;
+    private Button btn_rt;
+    private Button btn_up;
+    private Button btn_down;
+    private Button btn_left;
+    private Button btn_right;
+    private Button btn_fire;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//remove title bar  即隐藏标题栏
+        getSupportActionBar().hide();// 隐藏ActionBar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//remove notification bar  即全屏
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        setContentView(R.layout.activity_main);
+
         setContentView(R.layout.communication_layout);
         Intent intent = getIntent();
+        mToast = new ToastUtil(this);
         //得到传输过来的设备地址
         mAddress = intent.getStringExtra("address");
         mName = intent.getStringExtra("name");
-        initView();
-        initListener();
         //开始连接
         connectDevice();
+        button_init();
     }
 
-    private void initView() {
-        mEditText = findViewById(R.id.send_edit_text);
-        mSendBtn = findViewById(R.id.send_text_btn);
-        mToast = new ToastUtil(this);
-        mBtName = findViewById(R.id.bluetooth_name);
-        mBtName.setText(mName);
+    public void button_init(){
+        btn_listener_init(btn0, R.id.btn0, 0x18, 0x37);
+        btn_listener_init(btn1, R.id.btn1, 0x08, 0x27);
+        btn_listener_init(btn2, R.id.btn2, 0x09, 0x28);
+        btn_listener_init(btn3, R.id.btn3, 0x10, 0x29);
+        btn_listener_init(btn4, R.id.btn4, 0x11, 0x30);
+        btn_listener_init(btn5, R.id.btn5, 0x12, 0x31);
+        btn_listener_init(btn6, R.id.btn6, 0x13, 0x32);
+        btn_listener_init(btn7, R.id.btn7, 0x14, 0x33);
+        btn_listener_init(btn8, R.id.btn8, 0x15, 0x34);
+        btn_listener_init(btn9, R.id.btn9, 0x16, 0x35);
+        btn_listener_init(btn_up, R.id.btn_up, 0x01, 0x20);
+        btn_listener_init(btn_down, R.id.btn_down, 0x02, 0x21);
+        btn_listener_init(btn_left, R.id.btn_left, 0x03, 0x22);
+        btn_listener_init(btn_right, R.id.btn_right, 0x04, 0x23);
+        btn_listener_init(btn_pound, R.id.btn_pound, 0x19, 0x38);
+        btn_listener_init(btn_star, R.id.btn_star, 0x17, 0x36);
+        btn_listener_init(btn_fire, R.id.btn_fire, 0x05, 0x24);
+        btn_listener_init(btn_opt, R.id.btn_opt, 0x06, 0x25);
+        btn_listener_init(btn_rt, R.id.btn_rt, 0x07, 0x26);
     }
 
-    private void initListener() {
-        mSendBtn.setOnClickListener(new View.OnClickListener() {        // 按键点击事件
+    @SuppressLint("ClickableViewAccessibility")
+    public void btn_listener_init(Button btn, int resId, int press_num, int release_num){
+        btn = (Button) findViewById(resId);
+        btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                buffer[0] = 0x41;
-                mSendContentStr = mEditText.getText().toString();
-                //发送信息
-                sendMessage(buffer);
+            public boolean onTouch(View view, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    buffer[0] = (byte) press_num;
+                    sendMessage(buffer);
+                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                    buffer[0] = (byte) release_num;
+                    sendMessage(buffer);
+                }
+                return false;
             }
         });
+
     }
 
     /**
@@ -195,6 +243,22 @@ public class CommunicationActivity extends AppCompatActivity {
             }
         }
     }
+
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus){
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus && Build.VERSION.SDK_INT >= 26){
+//            View decorView = getWindow().getDecorView();
+//            decorView.setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//            );
+//        }
+//    }
 }
 
 
