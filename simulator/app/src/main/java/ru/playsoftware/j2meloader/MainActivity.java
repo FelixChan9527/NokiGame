@@ -49,6 +49,8 @@ import ru.woesss.j2me.installer.InstallerDialog;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 
+import javax.microedition.shell.MicroActivity;
+
 public class MainActivity extends BaseActivity {
 	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
@@ -83,9 +85,9 @@ public class MainActivity extends BaseActivity {
 			boolean enable = !ViewConfiguration.get(this).hasPermanentMenuKey();
 			preferences.edit().putBoolean(PREF_TOOLBAR, enable).apply();
 		}
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-	}
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);		// 音乐控制
 
+	}
 	private void checkAndCreateDirs() {
 		String emulatorDir = Config.getEmulatorDir();
 		File dir = new File(emulatorDir);

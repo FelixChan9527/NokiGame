@@ -18,6 +18,7 @@ package ru.playsoftware.j2meloader;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -42,6 +43,15 @@ import javax.microedition.util.ContextHolder;
 import ru.playsoftware.j2meloader.util.Constants;
 
 public class EmulatorApplication extends Application {
+
+	BluetoothSocket socket = null;
+	public BluetoothSocket getSocket(){
+		return socket;
+	}
+	public void setSocket(BluetoothSocket socket){
+		this.socket = socket;
+	}
+
 	private static final String[] VALID_SIGNATURES = {
 			"78EF7758720A9902F731ED706F72C669C39B765C", // GPlay
 			"289F84A32207DF89BE749481ED4BD07E15FC268F", // F-Droid

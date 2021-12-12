@@ -18,6 +18,7 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -62,6 +63,7 @@ import org.acra.ACRA;
 import org.acra.ErrorReporter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 
@@ -81,6 +83,7 @@ import javax.microedition.util.ContextHolder;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.Constants;
@@ -104,6 +107,8 @@ public class MicroActivity extends AppCompatActivity {
 	private String appName;
 	private InputMethodManager inputMethodManager;
 	private int menuKey;
+
+	BluetoothSocket socket = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -183,6 +188,45 @@ public class MicroActivity extends AppCompatActivity {
 /*********************在此出填写通信协议***************************************************/
 
 		System.out.println("##########由此进入7#################");
+		socket = ((EmulatorApplication)getApplication()).getSocket();		// 获取已连接的socket
+		ReceiveDataThread res_data = new ReceiveDataThread();				// 运行接收数据线程
+		res_data.start();
+	}
+
+	public class ReceiveDataThread extends Thread{
+
+		private InputStream inputStream;
+
+		public ReceiveDataThread() {
+			super();
+			try {
+				//获取连接socket的输入流
+				inputStream = socket.getInputStream();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		@Override
+		public void run() {
+			super.run();
+			byte[] buffer = new byte[1];    // 协议字节多长，就定多长，一个十六进制数是1个字节
+			while (true){
+				try {
+					inputStream.read(buffer);
+/**********************在此填写通信协议****************************************/
+                int a = (buffer[0]);
+                System.out.println(a);
+                if(a == 0x41)
+					if (current instanceof Canvas) {
+						Canvas canvas = (Canvas) current;
+						Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-5)));
+					}
+/**********************在此填写通信协议****************************************/
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public void setTheme() {
