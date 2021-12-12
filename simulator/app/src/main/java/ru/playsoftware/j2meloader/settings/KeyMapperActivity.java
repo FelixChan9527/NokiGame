@@ -19,6 +19,7 @@ package ru.playsoftware.j2meloader.settings;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -69,7 +70,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			finish();
 			return;
 		}
-		setContentView(R.layout.activity_keymapper);
+		setContentView(R.layout.activity_keymapper);		// 屏蔽这个没影响
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
@@ -142,9 +143,9 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 	}
 
 	private void setupButton(int resId, int index) {
-		idToCanvasKey.put(resId, index);
-		Button button = findViewById(resId);
-		button.setOnClickListener(this);
+		idToCanvasKey.put(resId, index);		// 往矩阵加入按键
+		Button button = findViewById(resId);	// 初始化按键
+		button.setOnClickListener(this);		// 监听按键		// 屏蔽这个没影响
 	}
 
 	@Override
@@ -179,7 +180,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.keymapper, menu);
+		inflater.inflate(R.menu.keymapper, menu);		// 无影响
 		return super.onCreateOptionsMenu(menu);
 	}
 

@@ -85,12 +85,14 @@ public abstract class Displayable {
 	}
 
 	public MicroActivity getParentActivity() {
+//		System.out.println("##########由此进入8#################");
 		return ContextHolder.getActivity();
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
 
+//		System.out.println("##########由此进入8#################");
 		MicroActivity activity = ContextHolder.getActivity();
 		if (isShown()) {
 			activity.runOnUiThread(() -> activity.setTitle(title));
@@ -102,6 +104,7 @@ public abstract class Displayable {
 	}
 
 	public boolean isShown() {
+//		System.out.println("##########由此进入8#################");
 		MicroActivity activity = ContextHolder.getActivity();
 		if (activity != null) {
 			return activity.isVisible() && activity.getCurrent() == this;

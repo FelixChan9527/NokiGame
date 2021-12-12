@@ -1,2 +1,15 @@
 主程序：E:\J2ME-Loader-1.7.4\J2ME-Loader-1.7.4\app\src\main\java\ru\playsoftware\j2meloader
 按键：KeyMapperActivity.java
+游戏截面：javax/microedition/shell/MicroActivity.java
+
+Eulator从ContextHolder.setApplication(this);传入acitivity
+有函数从ContextHolder中调用了setCurrentActivity，从而使用了acticity
+而在MicroActivity中调用了ContextHolder.setCurrentActivity(this);
+所以应该是被MicroActivity所调用。
+所以此时应该查看是哪个函数在执行时实例化了MicroActivity
+
+有函数比resumeApp更早一步实例化了MicroActivity
+
+有函数调用了MicroActivity的onResume，在上面调用MidletThread.resumeApp();并实例化了MicroActivity
+
+没有按键的时候键值为-1000

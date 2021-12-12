@@ -81,7 +81,7 @@ public class CommunicationActivity extends AppCompatActivity {
 
     /**
      * 发送数据的方法
-     * @param contentStr
+//     * @param contentStr
      */
     private void sendMessage(byte[] buffer) {   // 写数据缓存，协议字节多长，就定多长，一个十六进制数是1个字节
         if (mBluetoothSocket.isConnected()) {

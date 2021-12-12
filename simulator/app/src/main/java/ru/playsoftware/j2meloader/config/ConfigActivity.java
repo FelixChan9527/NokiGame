@@ -563,8 +563,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume() {		// 在这里继承
 		super.onResume();
+//		System.out.println("##########由此进入8#################");
 		if (needShow) {
 			loadParams(true);
 		}
@@ -857,6 +858,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void startMIDlet() {
+//		System.out.println("##########由此进入7#################");
 		Intent i = new Intent(this, MicroActivity.class);
 		i.setData(getIntent().getData());
 		i.putExtra(KEY_MIDLET_NAME, getIntent().getStringExtra(KEY_MIDLET_NAME));

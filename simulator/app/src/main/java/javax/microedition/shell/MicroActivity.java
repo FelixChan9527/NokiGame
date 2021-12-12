@@ -42,6 +42,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -66,11 +67,14 @@ import java.util.Objects;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.ViewHandler;
+import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
@@ -105,11 +109,12 @@ public class MicroActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		setTheme();
 		super.onCreate(savedInstanceState);
+		System.out.println("##########由此进入3#################");
 		ContextHolder.setCurrentActivity(this);
-		setContentView(R.layout.activity_micro);
+		setContentView(R.layout.activity_micro);		// 这是游戏界面
 		OverlayView overlayView = findViewById(R.id.vOverlay);
 		layout = findViewById(R.id.displayable_container);
-		toolbar = findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);		// 这是顶层工具箱
 		setSupportActionBar(toolbar);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
@@ -125,25 +130,27 @@ public class MicroActivity extends AppCompatActivity {
 			showErrorDialog("Invalid intent: app path is null");
 			return;
 		}
-		String appPath = data.toString();
+		String appPath = data.toString();	// 应该是关于数据加载的
 		microLoader = new MicroLoader(this, appPath);
 		if (!microLoader.init()) {
 			Config.startApp(this, appName, appPath, true);
 			finish();
 			return;
 		}
-		microLoader.applyConfiguration();
-		VirtualKeyboard vk = ContextHolder.getVk();
-		int orientation = microLoader.getOrientation();
-		if (vk != null) {
-			vk.setView(overlayView);
-			overlayView.addLayer(vk);
-			if (vk.isPhone()) {
-				orientation = ORIENTATION_PORTRAIT;
-			}
-		}
-		setOrientation(orientation);
-		menuKey = microLoader.getMenuKeyCode();
+		microLoader.applyConfiguration();		// 不能删
+//		VirtualKeyboard vk = ContextHolder.getVk();
+//		VirtualKeyboard vk = null;		// 在这里初始化键盘，直接屏蔽
+//		int orientation = microLoader.getOrientation();
+//		if (vk != null) {
+//			vk.setView(overlayView);
+//			overlayView.addLayer(vk);		// 这个只是显示按键，屏蔽掉只是看不见按键了
+//			if (vk.isPhone()) {				// 无影响
+//				orientation = ORIENTATION_PORTRAIT;
+//			}
+//		}
+//		setOrientation(orientation);
+//		menuKey = microLoader.getMenuKeyCode();
+		// 以下不能删
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		try {
 			loadMIDlet();
@@ -151,6 +158,31 @@ public class MicroActivity extends AppCompatActivity {
 			e.printStackTrace();
 			showErrorDialog(e.toString());
 		}
+
+/*********************在此出填写通信协议***************************************************/
+		Button button1 = findViewById(R.id.iii);
+		button1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (current instanceof Canvas) {
+					Canvas canvas = (Canvas) current;
+					Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-7)));
+				}
+			}
+		});
+		Button button2 = findViewById(R.id.jjj);
+		button2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (current instanceof Canvas) {
+					Canvas canvas = (Canvas) current;
+					Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-5)));
+				}
+			}
+		});
+/*********************在此出填写通信协议***************************************************/
+
+		System.out.println("##########由此进入7#################");
 	}
 
 	public void setTheme() {
@@ -165,9 +197,10 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public void onResume() {
+	public void onResume() {		// MicroActivity create完就会调用
 		super.onResume();
 		visible = true;
+		System.out.println("##########由此进入5#################");
 		MidletThread.resumeApp();
 	}
 
@@ -227,7 +260,8 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	private void showMidletDialog(String[] names, final String[] classes) {
+	private void showMidletDialog(String[] names, final String[] classes) {		// 这是显示日志的
+//		System.out.println("##########由此进入4#################");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.select_dialog_title)
 				.setItems(names, (d, n) -> {
@@ -241,6 +275,8 @@ public class MicroActivity extends AppCompatActivity {
 					sb.append("Begin app: ").append(names[n]).append(", ").append(clazz);
 					errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 					MidletThread.create(microLoader, clazz);
+
+//					System.out.println("##########由此进入7#################");
 					MidletThread.resumeApp();
 				})
 				.setOnCancelListener(d -> {
@@ -379,7 +415,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+	public boolean onKeyLongPress(int keyCode, KeyEvent event) {		// 不是
 		if (keyCode == menuKey || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU) {
 			showExitConfirmation();
 			return true;
@@ -388,7 +424,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKeyDown(int keyCode, KeyEvent event) {		// 不是
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			return false;
 		}
@@ -396,7 +432,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
+	public boolean onKeyUp(int keyCode, KeyEvent event) {		// 不是
 		if ((keyCode == menuKey || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU)
 				&& (event.getFlags() & (KeyEvent.FLAG_LONG_PRESS | KeyEvent.FLAG_CANCELED)) == 0) {
 			openOptionsMenu();

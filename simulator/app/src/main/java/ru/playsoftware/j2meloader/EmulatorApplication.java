@@ -62,6 +62,7 @@ public class EmulatorApplication extends Application {
 			MultiDex.install(this);
 		}
 		ContextHolder.setApplication(this);
+		System.out.println("##########由此进入1#################");
 		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) {
 			CoreConfigurationBuilder builder = new CoreConfigurationBuilder(this);
 			builder.withBuildConfigClass(BuildConfig.class)

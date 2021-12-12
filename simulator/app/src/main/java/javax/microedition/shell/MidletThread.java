@@ -21,14 +21,21 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.os.Process;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.event.CanvasEvent;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
+
+import ru.playsoftware.j2meloader.R;
 
 public class MidletThread extends HandlerThread implements Handler.Callback {
 	private static final String TAG = MidletThread.class.getName();
@@ -63,11 +70,12 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 		instance = new MidletThread(microLoader, mainClass);
 	}
 
-	public static void notifyDestroyed() {
+	public static void notifyDestroyed() {		// 离开软件先再进入这个
 		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 		if (instance != null) {
 			instance.state = DESTROYED;
 		}
+//		System.out.println("##########由此进入8#################");
 		MicroActivity activity = ContextHolder.getActivity();
 		if (activity != null) {
 			activity.finish();
@@ -84,13 +92,14 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 			instance.handler.obtainMessage(PAUSE).sendToTarget();
 	}
 
-	public static void resumeApp() {
-		MicroActivity activity = ContextHolder.getActivity();
+	public static void resumeApp() {		// 使用这个软件的时候会进去这个函数
+//		System.out.println("##########由此进入8#################");
+		MicroActivity activity = ContextHolder.getActivity();		// 实例化
 		if (instance != null && activity != null && activity.isVisible())
 			instance.handler.obtainMessage(START).sendToTarget();
 	}
 
-	static void destroyApp() {
+	static void destroyApp() {		// 关闭软件会进入
 		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 		new Thread(() -> {
 			try {
@@ -101,6 +110,7 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 			Process.killProcess(Process.myPid());
 		}, "ForceDestroyTimer").start();
 		MicroActivity activity = ContextHolder.getActivity();
+//		System.out.println("6666666");
 		if (activity != null) {
 			Displayable current = activity.getCurrent();
 			if (current instanceof Canvas) {

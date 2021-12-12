@@ -908,7 +908,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	@Override
-	public boolean pointerPressed(int pointer, float x, float y) {
+	public boolean pointerPressed(int pointer, float x, float y) {		// 点击屏幕任何地方都会进入，如果刚好触碰到按键，则进入
+//		System.out.println("ooooooooooooooo");
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
@@ -960,7 +961,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	@Override
-	public boolean pointerDragged(int pointer, float x, float y) {
+	public boolean pointerDragged(int pointer, float x, float y) {		// 从这里进入，应该是跟屏幕有关
+//		System.out.println("qqqqqqqqqqqqqqqqq");
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
@@ -973,7 +975,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					associatedKeys[pointer] = null;
 					aKey.onUp();
 					overlayView.postInvalidate();
-					pointerPressed(pointer, x, y);
+					pointerPressed(pointer, x, y);		// 从这里进入
 				}
 				break;
 			case LAYOUT_KEYS:
@@ -1284,9 +1286,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			target.postKeyRepeated(keyCode);
 		}
 
-		protected void onDown() {
+		protected void onDown() {		// 点击会进入
 			selected = true;
 			target.postKeyPressed(keyCode);
+//			System.out.println("jjjjjjjjjjjjjjj");
 			handler.postDelayed(this, 400);
 		}
 
@@ -1310,13 +1313,13 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 
 		@Override
-		protected void onDown() {
+		protected void onDown() {		// 不用
 			super.onDown();
 			target.postKeyPressed(secondKeyCode);
 		}
 
 		@Override
-		public void onUp() {
+		public void onUp() {		// 不用
 			super.onUp();
 			target.postKeyReleased(secondKeyCode);
 		}
@@ -1350,6 +1353,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			if (selected) {
 				selected = false;
 				handler.removeCallbacks(this);
+//				System.out.println("##########由此进入8#################");
 				MicroActivity activity = ContextHolder.getActivity();
 				if (activity != null) {
 					activity.openOptionsMenu();
@@ -1360,6 +1364,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		@Override
 		public void run() {
 			selected = false;
+//			System.out.println("##########由此进入8#################");
 			MicroActivity activity = ContextHolder.getActivity();
 			if (activity != null) {
 				activity.showExitConfirmation();

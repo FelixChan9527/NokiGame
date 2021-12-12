@@ -149,6 +149,7 @@ public abstract class Canvas extends Displayable {
 	private static int screenGravity;
 
 	public Canvas() {
+//        System.out.println("##########由此进入6#################");
 		if (graphicsMode == 1) {
 			renderer = new GLRenderer();
 		}
@@ -226,15 +227,21 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	public void postKeyPressed(int keyCode) {
+	public void postKeyPressed(int keyCode) {	// 点击
+//		System.out.println("11111111111111111111111");
+//		System.out.println(keyCode);
 		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
-	public void postKeyReleased(int keyCode) {
+	public void postKeyReleased(int keyCode) {		// 松开
+//		System.out.println("222222222222222222222222");
+//		System.out.println(keyCode);
 		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
-	public void postKeyRepeated(int keyCode) {
+	public void postKeyRepeated(int keyCode) {		// 长按就会重复进入
+//		System.out.println("33333333333333333333333333333");
+//		System.out.println(keyCode);
 		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
@@ -448,9 +455,10 @@ public abstract class Canvas extends Displayable {
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
-	public View getDisplayableView() {
+	public View getDisplayableView() {		// 由此进入
 		if (layout == null) {
 			layout = (LinearLayout) super.getDisplayableView();
+//			System.out.println("##########由此进入8#################");
 			MicroActivity activity = getParentActivity();
 			if (graphicsMode == 1) {
 				GlesView glesView = new GlesView(activity);
@@ -975,7 +983,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		@SuppressLint("ClickableViewAccessibility")
-		public boolean onTouch(View v, MotionEvent event) {
+		public boolean onTouch(View v, MotionEvent event) {		// 触碰屏幕任何地方都触发，最先进入
 			switch (event.getActionMasked()) {
 				case MotionEvent.ACTION_DOWN:
 					if (overlay != null) {
@@ -987,7 +995,7 @@ public abstract class Canvas extends Displayable {
 					float x = event.getX(index);
 					float y = event.getY(index);
 					if (overlay != null) {
-						overlay.pointerPressed(id, x, y);
+						overlay.pointerPressed(id, x, y);	// 最先进入
 					}
 					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
@@ -1004,7 +1012,7 @@ public abstract class Canvas extends Displayable {
 							x = event.getHistoricalX(p, h);
 							y = event.getHistoricalY(p, h);
 							if (overlay != null) {
-								overlay.pointerDragged(id, x, y);
+								overlay.pointerDragged(id, x, y);		// 进入
 							}
 							if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 								Display.postEvent(CanvasEvent.getInstance(Canvas.this,

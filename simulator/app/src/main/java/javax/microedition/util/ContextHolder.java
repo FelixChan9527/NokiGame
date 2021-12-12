@@ -51,18 +51,20 @@ public class ContextHolder {
 
 	private static Display display;
 	private static VirtualKeyboard vk;
-	private static WeakReference<MicroActivity> currentActivity;
+	private static WeakReference<MicroActivity> currentActivity;		// 在这里实例化了，空的
 	private static Vibrator vibrator;
 	private static Context appContext;
 	private static final ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 	private static boolean vibrationEnabled;
 
-	public static Context getAppContext() {
+	public static Context getAppContext() {		// 这个函数用于返回application
+		System.out.println("##########由此进入2#################");
 		return appContext;
 	}
 
 	public static VirtualKeyboard getVk() {
-		return vk;
+//		return vk;
+		return null;
 	}
 
 	public static void setVk(VirtualKeyboard vk) {
@@ -70,21 +72,26 @@ public class ContextHolder {
 	}
 
 	private static Display getDisplay() {
+//		System.out.println("##########由此进入3#################");
 		if (display == null) {
+			// 从getAppContext中得到activity
 			display = ((WindowManager) Objects.requireNonNull(getAppContext().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
 		}
 		return display;
 	}
 
-	public static int getDisplayWidth() {
+	public static int getDisplayWidth() {		// 得到宽高
+//		System.out.println("##########由此进入4#################");
 		return getDisplay().getWidth();
 	}
 
-	public static int getDisplayHeight() {
+	public static int getDisplayHeight() {		// 得到宽高
+//		System.out.println("##########由此进入5#################");
 		return getDisplay().getHeight();
 	}
 
-	public static void setCurrentActivity(MicroActivity activity) {
+	public static void setCurrentActivity(MicroActivity activity) {		// 应该由此进入
+		System.out.println("##########由此进入4#################");
 		currentActivity = new WeakReference<>(activity);
 	}
 
@@ -129,7 +136,8 @@ public class ContextHolder {
 		return new File(AppClassLoader.getDataDir(), name);
 	}
 
-	public static File getCacheDir() {
+	public static File getCacheDir() {		// 应该是为了得到文件夹
+//		System.out.println("##########由此进入4#################");
 		return getAppContext().getExternalCacheDir();
 	}
 
@@ -142,7 +150,8 @@ public class ContextHolder {
 		}
 	}
 
-	public static String getAssetAsString(String fileName) {
+	public static String getAssetAsString(String fileName) {	// 没用
+//		System.out.println("##########由此进入5#################");
 		StringBuilder sb = new StringBuilder();
 
 		try (InputStream is = getAppContext().getAssets().open(fileName);
@@ -158,10 +167,12 @@ public class ContextHolder {
 	}
 
 	public static MicroActivity getActivity() {
+//		System.out.println("##########由此进入8#################");
 		return currentActivity.get();
 	}
 
-	public static boolean vibrate(int duration) {
+	public static boolean vibrate(int duration) {		// 没用
+//		System.out.println("##########由此进入6#################");
 		if (!vibrationEnabled) {
 			return false;
 		}
@@ -181,7 +192,8 @@ public class ContextHolder {
 		return true;
 	}
 
-	public static void vibrateKey(int duration) {
+	public static void vibrateKey(int duration) {		// 没用
+//		System.out.println("##########由此进入7#################");
 		if (vibrator == null) {
 			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
 		}
