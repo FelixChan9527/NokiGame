@@ -58,7 +58,6 @@ public class ContextHolder {
 	private static boolean vibrationEnabled;
 
 	public static Context getAppContext() {		// 这个函数用于返回application
-		System.out.println("##########由此进入2#################");
 		return appContext;
 	}
 
@@ -91,7 +90,6 @@ public class ContextHolder {
 	}
 
 	public static void setCurrentActivity(MicroActivity activity) {		// 应该由此进入
-		System.out.println("##########由此进入4#################");
 		currentActivity = new WeakReference<>(activity);
 	}
 

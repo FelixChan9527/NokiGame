@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -110,12 +111,14 @@ public class CommunicationActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     public void btn_listener_init(Button btn, int resId, int press_num, int release_num){
+        Vibrator vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
         btn = (Button) findViewById(resId);
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
                     buffer[0] = (byte) press_num;
+                    vibrator.vibrate(30);
                     sendMessage(buffer);
                 }else if(event.getAction() == MotionEvent.ACTION_UP){
                     buffer[0] = (byte) release_num;

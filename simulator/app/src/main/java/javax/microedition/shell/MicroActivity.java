@@ -114,7 +114,6 @@ public class MicroActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		setTheme();
 		super.onCreate(savedInstanceState);
-		System.out.println("##########由此进入3#################");
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);		// 这是游戏界面
 		OverlayView overlayView = findViewById(R.id.vOverlay);
@@ -153,26 +152,6 @@ public class MicroActivity extends AppCompatActivity {
 			showErrorDialog(e.toString());
 		}
 
-/*********************在此出填写通信协议***************************************************/
-		Button button1 = findViewById(R.id.iii);
-		button1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Canvas canvas = (Canvas) current;
-				Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-7)));
-			}
-		});
-		Button button2 = findViewById(R.id.jjj);
-		button2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Canvas canvas = (Canvas) current;
-				Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(-5)));
-			}
-		});
-/*********************在此出填写通信协议***************************************************/
-
-		System.out.println("##########由此进入7#################");
 		socket = ((EmulatorApplication)getApplication()).getSocket();		// 获取已连接的socket
 		ReceiveDataThread res_data = new ReceiveDataThread();				// 运行接收数据线程
 		res_data.start();
@@ -254,7 +233,6 @@ public class MicroActivity extends AppCompatActivity {
 				case 0x36:	release_key(42);	break;				// * 松开
 				case 0x37:	release_key(48);	break;				// 0 松开
 				case 0x38:	release_key(35);	break;				// # 松开
-
 			}
 		}
 	}
@@ -274,7 +252,6 @@ public class MicroActivity extends AppCompatActivity {
 	public void onResume() {		// MicroActivity create完就会调用
 		super.onResume();
 		visible = true;
-		System.out.println("##########由此进入5#################");
 		MidletThread.resumeApp();
 	}
 
