@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CommunicationActivity"/>
+        <activity android:name=".Communication2Activity"/>
     </application>
 
 </manifest>

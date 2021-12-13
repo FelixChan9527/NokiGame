@@ -172,7 +172,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //获取点击的item的设备信息
                 DeviceInformation deviceInformation = mDatas.get(position);
                 //跳转到设备通信页面
-                Intent intent = new Intent(MainActivity.this,CommunicationActivity.class);
+//                Intent intent = new Intent(MainActivity.this,CommunicationActivity.class);
+                Intent intent = new Intent(MainActivity.this,Communication2Activity.class);
                 //将设备地址传递过去
                 intent.putExtra("name",deviceInformation.getDeviceName());
                 intent.putExtra("address",deviceInformation.getDeviceAddress());
